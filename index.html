@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Java OOP Guide Part 2 - Protecting Your Data</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+        margin-top: 2rem;
+      }
+
+      pre {
+        background: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+        overflow-x: auto;
+        border: 1px solid #e9ecef;
+        width: calc(100% - 2rem);
+      }
+
+      .keyword {
+        color: #0033b3;
+      }
+      .string {
+        color: #067d17;
+      }
+      .comment {
+        color: #8c8c8c;
+      }
+      .number {
+        color: #1750eb;
+      }
+      .type {
+        color: #000080;
+      }
+
+      .tip {
+        background: #e3f2fd;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+
+      .warning {
+        background: #fff3e0;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Leveling Up Your Pet Shop - Protecting Our Data! 🛡️</h1>
+
+    <p>
+      Welcome back to the Pet Shop! Last time we created pets and taught them to make sounds. But there's a small
+      problem with our code that we need to fix. Let's see what can go wrong...
+    </p>
+
+    <h2>Something's Not Quite Right 🤔</h2>
+
+    <p>Try running this code in your Main class:</p>
+
+    <pre><span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+    Pet buddy = <span class="keyword">new</span> Pet(<span class="string">"Buddy"</span>, <span class="string">"dog"</span>, <span class="number">3</span>);
+    out.println(<span class="string">"Buddy's age: "</span> + buddy.age);
+    
+    <span class="comment">// Uh oh... let's do something weird</span>
+    buddy.age = -<span class="number">5</span>;
+    out.println(<span class="string">"Buddy's new age: "</span> + buddy.age);
+}</pre>
+
+    <p>That's strange... our program lets us give Buddy a negative age! 😱 Let's try something else:</p>
+
+    <pre>    <span class="comment">// More weird stuff...</span>
+    buddy.type = <span class="string">""</span>;  <span class="comment">// Empty string for type</span>
+    buddy.name = <span class="keyword">null</span>;  <span class="comment">// No name at all!</span>
+    
+    out.println(buddy.makeSound());  <span class="comment">// What sound does a "" make?</span></pre>
+
+    <div class="warning">
+      <strong>The Problem:</strong> Because our fields (name, type, age) are <span class="keyword">public</span>, any
+      code can change them to anything - even values that don't make sense!
+    </div>
+
+    <h2>Protecting Our Pet's Data 🔒</h2>
+
+    <p>
+      In Java, we can protect our data by making fields <span class="keyword">private</span>. Let's update our Pet
+      class:
+    </p>
+
+    <pre><span class="keyword">public class</span> Pet {
+    <span class="keyword">private</span> <span class="type">String</span> name;   <span class="comment">// Changed from public to private</span>
+    <span class="keyword">private</span> <span class="type">String</span> type;   <span class="comment">// Changed from public to private</span>
+    <span class="keyword">private</span> <span class="type">int</span> age;    <span class="comment">// Changed from public to private</span>
+    
+    <span class="comment">// Constructor stays the same</span>
+    <span class="keyword">public</span> Pet(<span class="type">String</span> name, <span class="type">String</span> type, <span class="type">int</span> age) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.type = type;
+        <span class="keyword">this</span>.age = age;
+    }
+    
+    <span class="comment">// makeSound() method stays the same</span>
+    <span class="keyword">public</span> <span class="type">String</span> makeSound() {
+        <span class="keyword">if</span> (type.equals(<span class="string">"dog"</span>)) {
+            <span class="keyword">return</span> <span class="string">"Woof!"</span>;
+        } <span class="keyword">else if</span> (type.equals(<span class="string">"cat"</span>)) {
+            <span class="keyword">return</span> <span class="string">"Meow!"</span>;
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> <span class="string">"*mysterious pet noises*"</span>;
+        }
+    }
+}</pre>
+
+    <h2>Try It Out! ▶️</h2>
+
+    <p>Now try running your previous Main code again. You should see some errors like:</p>
+    <pre>
+error: age has private access in Pet
+        buddy.age = -5;
+             ^
+error: type has private access in Pet
+        buddy.type = "";
+             ^</pre
+    >
+
+    <div class="tip">
+      <strong>That's Good!</strong> These errors are Java's way of saying "Hey! You can't just change these values
+      directly anymore. They're private!" 🚫
+    </div>
+
+    <p>But wait... if the fields are private, how can we:</p>
+    <ul>
+      <li>See what a pet's name is?</li>
+      <li>Check how old they are?</li>
+      <li>Change their age when they have a birthday?</li>
+    </ul>
+
+    <p>
+      For that, we'll need something called "getters and setters" - but that's coming up in our next lesson! For now,
+      let's practice what we've learned.
+    </p>
+
+    <h2>Practice Time! 💪</h2>
+
+    <p>Try these exercises:</p>
+    <ol>
+      <li>Add a new private field to Pet called <code>price</code> (type double)</li>
+      <li>Update the constructor to accept and set the price</li>
+      <li>Try to write code in Main that directly changes the price - what error do you get?</li>
+    </ol>
+
+    <div class="tip">
+      <strong>Remember:</strong> Making fields private is about protecting our data from mistakes. It's like putting a
+      fence around your backyard - you can still get in, but you have to use the gate! 🏡
+    </div>
+
+    <h2>What We've Learned 🎓</h2>
+
+    <ul>
+      <li>Why public fields can be dangerous</li>
+      <li>How to make fields private</li>
+      <li>What happens when we try to access private fields</li>
+      <li>Why protecting our data is important</li>
+    </ul>
+
+    <p>
+      Next time, we'll learn about getters and setters - the proper way to work with private fields! Get ready to level
+      up your Java skills even more! 🚀
+    </p>
+
+    <h1>Making Safe Doorways - Getters and Setters! 🚪</h1>
+
+    <p>
+      Last time we protected our Pet's data by making the fields private. But now we can't access them at all! Let's fix
+      that by creating safe ways to work with our pet's information.
+    </p>
+
+    <h2>Getting Started with Getters 👀</h2>
+
+    <p>A "getter" is a method that lets us safely read a private field. Let's add some to our Pet class:</p>
+
+    <pre><span class="keyword">public class</span> Pet {
+    <span class="keyword">private</span> <span class="type">String</span> name;
+    <span class="keyword">private</span> <span class="type">String</span> type;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    
+    <span class="comment">// Constructor stays the same</span>
+
+    <span class="comment">// Here are our getters!</span>
+    <span class="keyword">public</span> <span class="type">String</span> getName() {
+        <span class="keyword">return</span> name;
+    }
+    
+    <span class="keyword">public</span> <span class="type">String</span> getType() {
+        <span class="keyword">return</span> type;
+    }
+    
+    <span class="keyword">public</span> <span class="type">int</span> getAge() {
+        <span class="keyword">return</span> age;
+    }
+}</pre>
+
+    <div class="tip">
+      <strong>Naming Pattern:</strong> Notice how getters start with "get" followed by the field name? This is a Java
+      convention that all programmers follow!
+    </div>
+
+    <h2>Now Let's Add Setters! ✏️</h2>
+
+    <p>
+      A "setter" is a method that lets us safely change a private field. The cool part? We can add checks to make sure
+      the new values make sense!
+    </p>
+
+    <pre><span class="keyword">public void</span> setAge(<span class="type">int</span> newAge) {
+    <span class="keyword">if</span> (newAge >= <span class="number">0</span>) {
+        age = newAge;
+    } <span class="keyword">else</span> {
+        out.println(<span class="string">"Error: Age cannot be negative!"</span>);
+    }
+}
+
+<span class="keyword">public void</span> setName(<span class="type">String</span> newName) {
+    <span class="keyword">if</span> (newName != <span class="keyword">null</span> && !newName.trim().isEmpty()) {
+        name = newName;
+    } <span class="keyword">else</span> {
+        out.println(<span class="string">"Error: Name cannot be empty!"</span>);
+    }
+}
+
+<span class="keyword">public void</span> setType(<span class="type">String</span> newType) {
+    <span class="keyword">if</span> (newType != <span class="keyword">null</span> && !newType.trim().isEmpty()) {
+        type = newType;
+    } <span class="keyword">else</span> {
+        out.println(<span class="string">"Error: Type cannot be empty!"</span>);
+    }
+}</pre>
+
+    <h2>Using Our New Methods 🎯</h2>
+
+    <p>Now we can update our Main class to use these getters and setters:</p>
+
+    <pre><span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+    Pet buddy = <span class="keyword">new</span> Pet(<span class="string">"Buddy"</span>, <span class="string">"dog"</span>, <span class="number">3</span>);
+    
+    <span class="comment">// Using getters</span>
+    out.println(<span class="string">"Name: "</span> + buddy.getName());
+    out.println(<span class="string">"Age: "</span> + buddy.getAge());
+    
+    <span class="comment">// Using setters - with validation!</span>
+    buddy.setAge(-<span class="number">5</span>);  <span class="comment">// This will print an error</span>
+    buddy.setAge(<span class="number">4</span>);   <span class="comment">// This works fine</span>
+    
+    buddy.setName(<span class="string">""</span>);   <span class="comment">// This will print an error</span>
+    buddy.setName(<span class="string">"Buddy Jr"</span>);  <span class="comment">// This works fine</span>
+    
+    <span class="comment">// Let's see the results</span>
+    out.println(<span class="string">"Updated name: "</span> + buddy.getName());
+    out.println(<span class="string">"Updated age: "</span> + buddy.getAge());
+}</pre>
+
+    <div class="warning">
+      <strong>Don't Forget!</strong> We need to update our printPetDetails method too! Instead of <code>pet.name</code>,
+      we now use <code>pet.getName()</code>.
+    </div>
+
+    <h2>Your Turn - Practice Time! 💪</h2>
+
+    <p>Let's make our Pet class even better:</p>
+
+    <ol>
+      <li>Add the <code>price</code> field from our last exercise</li>
+      <li>Create a getter for price (<code>getPrice</code>)</li>
+      <li>
+        Create a setter for price that ensures:
+        <ul>
+          <li>Price can't be negative</li>
+          <li>Price can't be more than 1000</li>
+        </ul>
+      </li>
+      <li>Test your new getter and setter in the main method</li>
+    </ol>
+
+    <div class="tip">
+      <strong>Bonus Challenge:</strong> Can you modify setType to only accept "dog", "cat", or "fish"? Any other type
+      should print an error! 🐱🐶🐠
+    </div>
+
+    <h2>Quick Recap! 🎓</h2>
+
+    <p>Let's see what we learned:</p>
+    <ul>
+      <li>How to create getters to safely read private fields</li>
+      <li>How to create setters with validation</li>
+      <li>Why validation is important</li>
+      <li>Java naming conventions for getters and setters</li>
+    </ul>
+
+    <p>
+      Next time, we'll add more complex behaviors to our pets - teaching them new tricks and making them interact with
+      each other! 🎾
+    </p>
+
+    <h1>Teaching New Tricks - Complex Pet Behaviors! 🎯</h1>
+
+    <p>
+      Our pets can now safely store their information, but they're still pretty basic. Let's teach them some new tricks
+      and make them more interactive!
+    </p>
+
+    <h2>Adding a Mood System 😊</h2>
+
+    <p>First, let's add a mood to our pets. Open your Pet class and add this new field:</p>
+
+    <pre><span class="keyword">public class</span> Pet {
+    <span class="keyword">private</span> <span class="type">String</span> name;
+    <span class="keyword">private</span> <span class="type">String</span> type;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> <span class="type">String</span> mood = <span class="string">"normal"</span>;  <span class="comment">// New field!</span>
+    
+    <span class="comment">// Add getter and setter for mood</span>
+    <span class="keyword">public</span> <span class="type">String</span> getMood() {
+        <span class="keyword">return</span> mood;
+    }
+    
+    <span class="keyword">private void</span> setMood(<span class="type">String</span> newMood) {
+        <span class="keyword">if</span> (newMood != <span class="keyword">null</span> && !newMood.trim().isEmpty()) {
+            mood = newMood;
+        }
+    }</pre>
+
+    <div class="tip">
+      <strong>Notice:</strong> We made setMood <span class="keyword">private</span> because we want to control mood
+      changes through specific actions, not direct setting!
+    </div>
+
+    <h2>Creating Interactive Methods 🤹‍♂️</h2>
+
+    <p>Now let's add some methods that change our pet's mood and interact with other pets:</p>
+
+    <pre><span class="keyword">public void</span> play() {
+    setMood(<span class="string">"happy"</span>);
+    out.println(name + <span class="string">" is playing and having fun!"</span>);
+    
+    <span class="keyword">if</span> (type.equals(<span class="string">"dog"</span>)) {
+        out.println(<span class="string">"*chasing tail*"</span>);
+    } <span class="keyword">else if</span> (type.equals(<span class="string">"cat"</span>)) {
+        out.println(<span class="string">"*batting at a toy mouse*"</span>);
+    }
+}
+
+<span class="keyword">public void</span> playWith(Pet otherPet) {
+    <span class="keyword">if</span> (<span class="keyword">this</span>.type.equals(otherPet.getType())) {
+        setMood(<span class="string">"happy"</span>);
+        otherPet.setMood(<span class="string">"happy"</span>);
+        out.println(name + <span class="string">" and "</span> + otherPet.getName() + 
+                   <span class="string">" are playing together!"</span>);
+    } <span class="keyword">else if</span> (<span class="keyword">this</span>.type.equals(<span class="string">"cat"</span>) && 
+             otherPet.getType().equals(<span class="string">"dog"</span>)) {
+        setMood(<span class="string">"grumpy"</span>);
+        out.println(name + <span class="string">" hisses and runs away from "</span> + 
+                   otherPet.getName());
+    }
+}</pre>
+
+    <h2>Making Moods Matter! 🎭</h2>
+
+    <p>Let's update our makeSound method to consider the pet's mood:</p>
+
+    <pre><span class="keyword">public</span> <span class="type">String</span> makeSound() {
+    <span class="keyword">if</span> (type.equals(<span class="string">"dog"</span>)) {
+        <span class="keyword">if</span> (mood.equals(<span class="string">"happy"</span>)) {
+            <span class="keyword">return</span> <span class="string">"Woof! Woof!"</span>;
+        } <span class="keyword">else if</span> (mood.equals(<span class="string">"grumpy"</span>)) {
+            <span class="keyword">return</span> <span class="string">"*grumble*"</span>;
+        }
+        <span class="keyword">return</span> <span class="string">"Woof!"</span>;
+    } <span class="keyword">else if</span> (type.equals(<span class="string">"cat"</span>)) {
+        <span class="keyword">if</span> (mood.equals(<span class="string">"happy"</span>)) {
+            <span class="keyword">return</span> <span class="string">"Purrrr!"</span>;
+        } <span class="keyword">else if</span> (mood.equals(<span class="string">"grumpy"</span>)) {
+            <span class="keyword">return</span> <span class="string">"Hiss!"</span>;
+        }
+        <span class="keyword">return</span> <span class="string">"Meow!"</span>;
+    }
+    <span class="keyword">return</span> <span class="string">"*mysterious pet noises*"</span>;
+}</pre>
+
+    <h2>Let's Try It Out! 🎮</h2>
+
+    <p>Here's how to use all our new features:</p>
+
+    <pre><span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+    Pet buddy = <span class="keyword">new</span> Pet(<span class="string">"Buddy"</span>, <span class="string">"dog"</span>, <span class="number">3</span>);
+    Pet whiskers = <span class="keyword">new</span> Pet(<span class="string">"Whiskers"</span>, <span class="string">"cat"</span>, <span class="number">5</span>);
+    Pet max = <span class="keyword">new</span> Pet(<span class="string">"Max"</span>, <span class="string">"dog"</span>, <span class="number">2</span>);
+    
+    <span class="comment">// Let's see how they interact!</span>
+    out.println(buddy.getName() + <span class="string">" says: "</span> + buddy.makeSound());
+    
+    buddy.play();  <span class="comment">// Makes Buddy happy</span>
+    out.println(buddy.getName() + <span class="string">" says: "</span> + buddy.makeSound());
+    
+    <span class="comment">// Try different pet interactions</span>
+    buddy.playWith(max);     <span class="comment">// Dogs play together</span>
+    whiskers.playWith(buddy);  <span class="comment">// Cat runs from dog</span>
+}</pre>
+
+    <h2>Your Turn - Final Challenge! 🏆</h2>
+
+    <p>Let's make our pets even more interactive! Add these features:</p>
+
+    <ol>
+      <li>
+        Add a <code>feed()</code> method that:
+        <ul>
+          <li>Makes the pet happy</li>
+          <li>Prints what the pet likes to eat (different for each type)</li>
+        </ul>
+      </li>
+      <li>
+        Add a <code>nap()</code> method that:
+        <ul>
+          <li>Changes mood to "sleepy"</li>
+          <li>Makes the pet quiet (affects makeSound)</li>
+        </ul>
+      </li>
+      <li>
+        Create a <code>birthday()</code> method that:
+        <ul>
+          <li>Increases age by 1</li>
+          <li>Makes the pet happy</li>
+          <li>Prints a celebration message</li>
+        </ul>
+      </li>
+    </ol>
+
+    <div class="tip">
+      <strong>Extra Challenge:</strong> Add an <code>energy</code> field (0-100) that:
+      <ul>
+        <li>Decreases when playing</li>
+        <li>Increases when napping</li>
+        <li>Affects how the pet behaves!</li>
+      </ul>
+    </div>
+
+    <h2>Wrapping Up Our Pet Shop Journey! 🎉</h2>
+
+    <p>Look at everything we've learned:</p>
+    <ul>
+      <li>How to protect our data with private fields</li>
+      <li>Using getters and setters for safe access</li>
+      <li>Creating methods that change object state</li>
+      <li>Making objects interact with each other</li>
+      <li>Using conditions to create different behaviors</li>
+    </ul>
+
+    <p>
+      Next time, we'll learn about inheritance - creating specific types of pets that share common features but have
+      their own unique behaviors! 🐾
+    </p>
+  </body>
+</html>
